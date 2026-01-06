@@ -7,8 +7,9 @@ export type BoardState = {
 
 export type BoardAction =
     | { type: "SELECT_ITEM"; payload: { id: string | null } }
-    | { type: "ADD_ITEM"; payload: { item: BoardItem } }
     | { type: "MOVE_ITEM"; payload: { id: string; x: number; y: number } }
+    | { type: "ADD_COLOR_ITEM" }
+    | { type: "ADD_TEXT_ITEM" };
 
 export const initialBoardState: BoardState = {
     board: {
@@ -41,16 +42,6 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
     switch (action.type) {
         case "SELECT_ITEM": {
             return { ...state, selectedItemId: action.payload.id };
-        }
-
-        case "ADD_ITEM": {
-            return {
-                ...state,
-                board: {
-                    ...state.board,
-                    items: [...state.board.items, action.payload.item],
-                },
-            };
         }
 
         case "MOVE_ITEM": {
