@@ -23,9 +23,17 @@ const Toolbar = ({ state, dispatch }: ToolbarProps) => {
             <button
                 type="button"
                 className="rounded-md border bg-white px-3 py-1 text-sm"
-                onClick={moveSelectedRight}
+                onClick={() => dispatch({ type: "ADD_COLOR_ITEM" })}
             >
-                Move selected → 20px
+                Add color
+            </button>
+
+            <button
+                type="button"
+                className="rounded-md border bg-white px-3 py-1 text-sm"
+                onClick={() => dispatch({ type: "ADD_TEXT_ITEM" })}
+            >
+                Add text
             </button>
         </div>
     );
