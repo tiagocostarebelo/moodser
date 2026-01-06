@@ -13,7 +13,7 @@ const Canvas = () => {
     };
 
     return (
-        <div className="relative mx-auto mt-12 h-[600px] w-[1000px] bg-white border rounded-lg">
+        <div className="relative mx-auto mt-12 min-h-[600px] max-w-[1000px] w-full px-4 bg-white border rounded-lg">
             {items.map((item) => {
                 if (item.type === "color") {
                     return (
@@ -21,12 +21,14 @@ const Canvas = () => {
                             key={item.id}
                             type="button"
                             aria-label={`Color swatch ${item.hex}`}
-                            className="absolute w-32 h-32 rounded-md border"
+                            className={`absolute rounded-md border`}
                             onClick={() => handleSelect(item.id)}
                             style={{
                                 left: item.x,
                                 top: item.y,
                                 backgroundColor: item.hex,
+                                width: item.width,
+                                height: item.height,
                                 zIndex: item.zIndex,
                                 borderColor: state.selectedItemId === item.id ? "black" : "transparent",
                             }}

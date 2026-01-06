@@ -17,6 +17,8 @@ export const initialBoardState: BoardState = {
                 id: "1",
                 type: "color",
                 hex: "#F4D03F",
+                width: 100,
+                height: 100,
                 x: 100,
                 y: 80,
                 zIndex: 1,
