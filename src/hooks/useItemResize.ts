@@ -42,12 +42,22 @@ export function useItemResize({ id, width, height, dispatch }: UseItemResizeArgs
         const dx = e.clientX - r.startPointerX;
         const dy = e.clientY - r.startPointerY;
 
+        let nextWidth = r.startWidth + dx;
+        let nextHeight = r.startHeight + dy;
+
+        // Constrains when holding Shift
+        if (e.shiftKey) {
+            const delta = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+            nextWidth = r.startWidth + delta;
+            nextHeight = r.startHeight + delta;
+        }
+
         dispatch({
             type: "RESIZE_ITEM",
             payload: {
                 id,
-                width: r.startWidth + dx,
-                height: r.startHeight + dy,
+                width: nextWidth,
+                height: nextHeight,
             },
         });
     };
