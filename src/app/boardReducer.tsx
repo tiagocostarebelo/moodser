@@ -15,7 +15,8 @@ export type BoardAction =
     | { type: "BRING_TO_FRONT"; payload: { id: string } }
     | { type: "DELETE_ITEM"; payload: { id: string } }
     | { type: "ADD_COLOR_ITEM" }
-    | { type: "ADD_TEXT_ITEM" };
+    | { type: "ADD_TEXT_ITEM" }
+    | { type: "UPDATE_TEXT"; payload: { id: string, text: string } }
 
 export const initialBoardState: BoardState = {
     board: {
@@ -168,6 +169,20 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
                 },
                 selectedItemId: newItem.id,
             };
+        }
+
+
+        case "UPDATE_TEXT": {
+            const { id, text } = action.payload;
+
+            return {
+                ...state,
+                board: {
+                    ...state.board,
+                    items: state.board.items.map((item) =>
+                        item.id === id && item.type === "text" ? { ...item, text } : item)
+                }
+            }
         }
 
         default: {
