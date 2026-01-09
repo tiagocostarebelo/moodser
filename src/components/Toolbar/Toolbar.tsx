@@ -11,6 +11,9 @@ type ToolbarProps = {
 const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
     const [imageUrl, setImageUrl] = useState("");
 
+    const selectedItem = state.selectedItemId ? state.board.items.find((item) => item.id === state.selectedItemId) : null;
+    const selectedColorItem = selectedItem?.type === "color" ? selectedItem : null;
+
     const exportPng = async () => {
         const node = boardRef.current;
         if (!node) return;
@@ -32,19 +35,6 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
             )
         }
     }
-
-    const moveSelectedFarRight = () => {
-        if (!state.selectedItemId) return;
-
-        const item = state.board.items.find((item) => item.id === state.selectedItemId);
-        if (!item) return;
-
-        // push way beyond canvas width on purpose
-        dispatch({
-            type: "MOVE_ITEM",
-            payload: { id: state.selectedItemId, x: 5000, y: item.y },
-        });
-    };
 
     return (
         <div className="flex gap-2">
@@ -76,20 +66,44 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
                 Add color
             </button>
 
+            {selectedColorItem && (
+                <div className="flex items-center gap-2">
+                    <label className="text-sm text-neutral-700">Color</label>
+
+                    <input
+                        type="color"
+                        value={selectedColorItem.hex}
+                        onChange={(e) =>
+                            dispatch({
+                                type: "UPDATE_COLOR",
+                                payload: { id: selectedColorItem.id, hex: e.target.value },
+                            })
+                        }
+                        className="h-8 w-10 cursor-pointer rounded border"
+                        aria-label="Pick color"
+                    />
+
+                    <input
+                        type="text"
+                        value={selectedColorItem.hex}
+                        onChange={(e) =>
+                            dispatch({
+                                type: "UPDATE_COLOR",
+                                payload: { id: selectedColorItem.id, hex: e.target.value },
+                            })
+                        }
+                        className="w-28 rounded-md border bg-white px-2 py-1 text-sm"
+                        spellCheck={false}
+                    />
+                </div>
+            )}
+
             <button
                 type="button"
                 className="rounded-md border bg-white px-3 py-1 text-sm"
                 onClick={() => dispatch({ type: "ADD_TEXT_ITEM" })}
             >
                 Add text
-            </button>
-
-            <button
-                type="button"
-                className="rounded-md border bg-white px-3 py-1 text-sm"
-                onClick={moveSelectedFarRight}
-            >
-                Move selected → x=5000
             </button>
 
             <button

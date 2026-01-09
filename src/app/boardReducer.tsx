@@ -19,6 +19,7 @@ export type BoardAction =
     | { type: "ADD_TEXT_ITEM" }
     | { type: "ADD_IMAGE_ITEM", payload: { src: string } }
     | { type: "UPDATE_TEXT"; payload: { id: string, text: string } }
+    | { type: "UPDATE_COLOR"; payload: { id: string, hex: string } }
 
 export const initialBoardState: BoardState = {
     board: {
@@ -238,6 +239,21 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
                     ...state.board,
                     items: state.board.items.map((item) =>
                         item.id === id && item.type === "text" ? { ...item, text } : item)
+                }
+            }
+        }
+
+        case "UPDATE_COLOR": {
+            const { id, hex } = action.payload;
+
+            const nextHex = hex.trim();
+
+            return {
+                ...state,
+                board: {
+                    ...state.board,
+                    items: state.board.items.map((item) =>
+                        item.id === id && item.type === "color" ? { ...item, hex: nextHex } : item)
                 }
             }
         }
