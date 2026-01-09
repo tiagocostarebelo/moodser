@@ -28,5 +28,7 @@ export type BoardItem = ImageItem | ColorItem | TextItem;
 
 export type Board = {
     id: string;
+    width: number;
+    height: number;
     items: BoardItem[];
 }

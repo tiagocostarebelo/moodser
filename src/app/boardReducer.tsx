@@ -1,4 +1,6 @@
 import type { Board } from "../types/board";
+import { clamp } from "../utils/clamp";
+import { getItemSize } from "./itemBounds";
 import { createTextItem, createColorItem } from "./itemFactory";
 
 export type BoardState = {
@@ -15,6 +17,8 @@ export type BoardAction =
 export const initialBoardState: BoardState = {
     board: {
         id: "board-1",
+        width: 1000,
+        height: 600,
         items: [
             {
                 id: "1",
@@ -48,11 +52,19 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
         case "MOVE_ITEM": {
             const { id, x, y } = action.payload;
 
+            const target = state.board.items.find((item) => item.id === id);
+            if (!target) return state;
+
+            const { width, height } = getItemSize(target);
+
+            const clampedX = clamp(x, 0, state.board.width - width);
+            const clampedY = clamp(y, 0, state.board.height - height);
+
             return {
                 ...state,
                 board: {
                     ...state.board,
-                    items: state.board.items.map((item) => item.id === id ? { ...item, x, y } : item)
+                    items: state.board.items.map((item) => item.id === id ? { ...item, x: clampedX, y: clampedY } : item)
                 }
             };
         }
