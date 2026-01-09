@@ -12,6 +12,7 @@ const Canvas = ({ state, dispatch }: CanvasProps) => {
 
     const handleSelect = (id: string) => {
         dispatch({ type: "SELECT_ITEM", payload: { id } });
+        dispatch({ type: "BRING_TO_FRONT", payload: { id } });
     };
 
     return (
