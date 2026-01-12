@@ -6,9 +6,10 @@ type UseItemDragArgs = {
     x: number;
     y: number;
     dispatch: React.Dispatch<BoardAction>;
+    scale?: number;
 };
 
-export function useItemDrag({ id, x, y, dispatch }: UseItemDragArgs) {
+export function useItemDrag({ id, x, y, dispatch, scale = 1 }: UseItemDragArgs) {
     const dragRef = useRef<{
         startPointerX: number;
         startPointerY: number;
@@ -38,8 +39,8 @@ export function useItemDrag({ id, x, y, dispatch }: UseItemDragArgs) {
         if (!drag?.isDragging) return;
         if (drag.pointerId !== e.pointerId) return;
 
-        const dx = e.clientX - drag.startPointerX;
-        const dy = e.clientY - drag.startPointerY;
+        const dx = (e.clientX - drag.startPointerX) / scale;
+        const dy = (e.clientY - drag.startPointerY) / scale;
 
         dispatch({
             type: "MOVE_ITEM",

@@ -18,7 +18,7 @@ export type BoardAction =
     | { type: "ADD_COLOR_ITEM" }
     | { type: "ADD_TEXT_ITEM" }
     | { type: "ADD_IMAGE_ITEM", payload: { src: string } }
-    | { type: "UPDATE_TEXT"; payload: { id: string, text: string } }
+    | { type: "UPDATE_TEXT"; payload: { id: string; text: string; width: number; height: number } }
     | { type: "UPDATE_COLOR"; payload: { id: string, hex: string } }
 
 export const initialBoardState: BoardState = {
@@ -27,24 +27,7 @@ export const initialBoardState: BoardState = {
         width: 1000,
         height: 600,
         items: [
-            {
-                id: "1",
-                type: "color",
-                hex: "#F4D03F",
-                width: 100,
-                height: 100,
-                x: 100,
-                y: 80,
-                zIndex: 1,
-            },
-            {
-                id: "2",
-                type: "text",
-                text: "Warm & playful",
-                x: 260,
-                y: 100,
-                zIndex: 2,
-            },
+
         ],
     },
     selectedItemId: null,
@@ -231,14 +214,14 @@ export function boardReducer(state: BoardState, action: BoardAction): BoardState
 
 
         case "UPDATE_TEXT": {
-            const { id, text } = action.payload;
+            const { id, text, width, height } = action.payload;
 
             return {
                 ...state,
                 board: {
                     ...state.board,
                     items: state.board.items.map((item) =>
-                        item.id === id && item.type === "text" ? { ...item, text } : item)
+                        item.id === id && item.type === "text" ? { ...item, text, width, height } : item)
                 }
             }
         }

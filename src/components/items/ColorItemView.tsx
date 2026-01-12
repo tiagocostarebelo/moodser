@@ -8,14 +8,16 @@ type ColorItemViewProps = {
     isSelected: boolean;
     onSelect: (id: string) => void;
     dispatch: React.Dispatch<BoardAction>;
+    scale: number;
 };
 
-const ColorItemView = ({ item, isSelected, onSelect, dispatch }: ColorItemViewProps) => {
+const ColorItemView = ({ item, isSelected, onSelect, dispatch, scale }: ColorItemViewProps) => {
     const dragHandlers = useItemDrag({
         id: item.id,
         x: item.x,
         y: item.y,
         dispatch,
+        scale,
     });
 
     const resizeHandlers = useItemResize({
@@ -23,6 +25,7 @@ const ColorItemView = ({ item, isSelected, onSelect, dispatch }: ColorItemViewPr
         width: item.width,
         height: item.height,
         dispatch,
+        scale,
     });
 
     return (

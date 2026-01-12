@@ -1,6 +1,6 @@
 import type { ColorItem, TextItem, ImageItem } from "../types/board";
+import { generatedId } from "../utils/id";
 
-const generatedId = () => crypto.randomUUID();
 
 export function createColorItem(partial?: Partial<ColorItem>): ColorItem {
     return {
@@ -20,9 +20,11 @@ export function createTextItem(partial?: Partial<TextItem>): TextItem {
     return {
         id: generatedId(),
         type: "text",
-        text: "New note",
+        text: "New text",
         x: 240,
         y: 100,
+        width: 240,
+        height: 100,
         zIndex: 2,
         ...partial,
     };

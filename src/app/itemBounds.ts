@@ -7,7 +7,7 @@ export function getItemSize(item: BoardItem): { width: number; height: number } 
         case "image":
             return { width: item.width, height: item.height };
         case "text":
-            return { width: 180, height: 40 };
+            return { width: item.width, height: item.height };
         default:
             return { width: 0, height: 0 };
     }

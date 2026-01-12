@@ -22,6 +22,11 @@ export type ColorItem = BoardItemBase & {
 export type TextItem = BoardItemBase & {
     type: "text";
     text: string;
+    x: number;
+    y: number;
+    zIndex: number;
+    width: number;
+    height: number;
 };
 
 export type BoardItem = ImageItem | ColorItem | TextItem;

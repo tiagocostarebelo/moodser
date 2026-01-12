@@ -6,9 +6,10 @@ type UseItemResizeArgs = {
     width: number;
     height: number;
     dispatch: React.Dispatch<BoardAction>;
+    scale?: number;
 };
 
-export function useItemResize({ id, width, height, dispatch }: UseItemResizeArgs) {
+export function useItemResize({ id, width, height, dispatch, scale = 1 }: UseItemResizeArgs) {
     const ref = useRef<{
         startPointerX: number;
         startPointerY: number;
@@ -39,8 +40,8 @@ export function useItemResize({ id, width, height, dispatch }: UseItemResizeArgs
         if (!r?.isResizing) return;
         if (r.pointerId !== e.pointerId) return;
 
-        const dx = e.clientX - r.startPointerX;
-        const dy = e.clientY - r.startPointerY;
+        const dx = (e.clientX - r.startPointerX) / scale;
+        const dy = (e.clientY - r.startPointerY) / scale;
 
         let nextWidth = r.startWidth + dx;
         let nextHeight = r.startHeight + dy;

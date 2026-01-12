@@ -8,14 +8,16 @@ type ImageItemViewProps = {
     isSelected: boolean;
     onSelect: (item: string) => void;
     dispatch: React.Dispatch<BoardAction>;
+    scale: number;
 };
 
-const ImageItemView = ({ item, isSelected, onSelect, dispatch }: ImageItemViewProps) => {
+const ImageItemView = ({ item, isSelected, onSelect, dispatch, scale }: ImageItemViewProps) => {
     const dragHandlers = useItemDrag({
         id: item.id,
         x: item.x,
         y: item.y,
         dispatch,
+        scale
     });
 
     const resizeHandlers = useItemResize({
@@ -23,6 +25,7 @@ const ImageItemView = ({ item, isSelected, onSelect, dispatch }: ImageItemViewPr
         width: item.width,
         height: item.height,
         dispatch,
+        scale
     });
 
     return (

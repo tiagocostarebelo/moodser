@@ -66,6 +66,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
                                     isSelected={isSelected}
                                     onSelect={handleSelect}
                                     dispatch={dispatch}
+                                    scale={scale}
                                 />
                             );
                         }
@@ -78,6 +79,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
                                     isSelected={isSelected}
                                     onSelect={handleSelect}
                                     dispatch={dispatch}
+                                    scale={scale}
                                 />
                             )
                         }
@@ -90,6 +92,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
                                     isSelected={isSelected}
                                     onSelect={handleSelect}
                                     dispatch={dispatch}
+                                    scale={scale}
                                 />
                             );
                         }
