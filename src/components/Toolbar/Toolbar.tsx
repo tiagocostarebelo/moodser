@@ -17,6 +17,13 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
 
     const urlRef = useRef<HTMLInputElement | null>(null);
 
+    const btn = "whitespace-nowrap rounded-lg border border-black/10 bg-white px-3 py-2 text-sm font-medium text-neutral-900 shadow-sm hover:bg-neutral-50 active:translate-y-[1px]";
+
+    const btnGhost = "whitespace-nowrap rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white hover:bg-white/10";
+
+    const input = "w-full sm:w-80 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm outline-none focus:ring-2 focus:ring-black/15";
+
+
     const exportPng = async () => {
         const node = boardRef.current;
         if (!node) return;
@@ -50,8 +57,6 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
         dispatch({ type: "ADD_COLOR_ITEM" })
     }
 
-
-
     useEffect(() => {
         if (!isOpen) return;
         urlRef.current?.focus();
@@ -73,7 +78,7 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <input
                         ref={urlRef}
-                        className="w-full sm:w-80 rounded-md border bg-white px-2 py-1 text-sm"
+                        className={input}
                         placeholder="Paste image URL…"
                         value={imageUrl}
                         onChange={(e) => setImageUrl(e.target.value)}
@@ -81,7 +86,7 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
 
                     <button
                         type="button"
-                        className="whitespace-nowrap rounded-md border bg-white px-3 py-1 text-sm"
+                        className={btn}
                         onClick={() => {
                             const src = imageUrl.trim();
                             if (!src) return;
@@ -95,7 +100,7 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
 
                 <button
                     type="button"
-                    className="whitespace-nowrap rounded-md border bg-white px-3 py-1 text-sm"
+                    className={btn}
                     onClick={toggleAddColor}
                 >
                     {selectedColorItem ? "Close color" : "Add Color"}
@@ -103,7 +108,7 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
 
                 <button
                     type="button"
-                    className="whitespace-nowrap rounded-md border bg-white px-3 py-1 text-sm"
+                    className={btn}
                     onClick={() => dispatch({ type: "ADD_TEXT_ITEM" })}
                 >
                     Add text
@@ -143,22 +148,18 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
                     />
                 </div>
             )}
-
-
         </div >
-
     )
 
 
     return (
         <>
             {/** DESKTOP */}
-            <div className="hidden sm:grid sm:grid-cols-[1fr_auto] sm:items-start sm:gap-3">
+            <div className="hidden sm:flex items-center justify-between gap-3">
                 <div className="min-w-0">{ControlsContent}</div>
-
                 <button
                     type="button"
-                    className="whitespace-nowrap rounded-md border bg-white px-3 py-1 text-sm"
+                    className={btn}
                     onClick={exportPng}
                 >Export as PNG</button>
             </div>
@@ -167,7 +168,7 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
             <div className="flex items-center justify-between gap-2 sm:hidden">
                 <button
                     type="button"
-                    className="whitespace-nowrap rounded-md border bg-white px-3 py-1 text-sm"
+                    className={btnGhost}
                     onClick={() => setIsOpen(true)}
                 >
                     Controls
@@ -175,7 +176,7 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
 
                 <button
                     type="button"
-                    className="whitespace-nowrap rounded-md border bg-white px-3 py-1 text-sm"
+                    className={btn}
                     onClick={exportPng}
                 >
                     Export PNG
@@ -187,13 +188,13 @@ const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
                     {/* Backdrop */}
                     <button
                         type="button"
-                        className="fixed inset-0 z-40 bg-black/40"
+                        className="fixed inset-0 z-40 bg-black/50"
                         aria-label="Close controls"
                         onClick={() => setIsOpen(false)}
                     />
 
                     {/* Sheet */}
-                    <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-auto rounded-t-2xl bg-white p-4">
+                    <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-auto rounded-t-2xl bg-white p-4 shadow-[0_-18px_60px_rgba(0,0,0,0.35)]">
                         <div className="mb-3 flex items-center justify-between">
                             <p className="text-sm font-semibold">Controls</p>
                             <button

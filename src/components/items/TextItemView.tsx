@@ -184,7 +184,7 @@ const TextItemView = ({ item, isSelected, onSelect, dispatch, scale }: TextItemV
                         left: item.x,
                         top: item.y,
                         zIndex: item.zIndex,
-                        outline: isSelected ? "2px solid black" : "none",
+                        outline: isSelected ? "2px solid #3b82f6" : "none",
                         borderRadius: 6,
                         padding: "2px 6px",
                         cursor: "grab",

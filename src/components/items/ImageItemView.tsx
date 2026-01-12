@@ -53,7 +53,8 @@ const ImageItemView = ({ item, isSelected, onSelect, dispatch, scale }: ImageIte
                 onPointerUp={dragHandlers.onPointerUp}
                 onPointerCancel={dragHandlers.onPointerCancel}
                 style={{
-                    borderColor: isSelected ? "black" : "transparent",
+                    borderColor: isSelected ? "#3b82f6" : "transparent",
+                    borderWidth: 2,
                     cursor: "grab",
                 }}
             >
@@ -72,7 +73,7 @@ const ImageItemView = ({ item, isSelected, onSelect, dispatch, scale }: ImageIte
                     role="button"
                     tabIndex={0}
                     aria-label="Resize"
-                    className="absolute bottom-0 right-0 h-3 w-3 cursor-se-resize rounded-sm bg-black/70 touch-none"
+                    className={`absolute bottom-0 right-0 h-3 w-3 cursor-se-resize rounded-sm bg-black/70 touch-none`}
                     onPointerDown={resizeHandlers.onPointerDown}
                     onPointerMove={resizeHandlers.onPointerMove}
                     onPointerUp={resizeHandlers.onPointerUp}

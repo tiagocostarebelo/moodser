@@ -42,64 +42,70 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
 
         <div
             ref={viewportRef}
-            className="w-full">
-            <div className="origin-top-left"
-                style={{
-                    width: state.board.width,
-                    height: state.board.height,
-                    transform: `scale(${scale})`,
-                }}>
+            className="workspace-dots relative w-full overflow-auto rounded-xl bg-neutral-950/40 p-4 sm:p-6"
+        >
+            <div className="mx-auto w-fit">
                 <div
-                    ref={boardRef}
-                    className="relative bg-white border rounded-lg"
-                    style={{ width: state.board.width, height: state.board.height }}
-                    onPointerDown={() => dispatch({ type: "SELECT_ITEM", payload: { id: null } })}
+                    className="origin-top-left"
+                    style={{
+                        width: state.board.width,
+                        height: state.board.height,
+                        transform: `scale(${scale})`,
+                    }}
                 >
-                    {items.map((item) => {
-                        const isSelected = state.selectedItemId === item.id;
+                    <div
+                        ref={boardRef}
+                        className="relative rounded-xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] ring-1 ring-black/10"
+                        style={{ width: state.board.width, height: state.board.height }}
+                        onPointerDown={() => dispatch({ type: "SELECT_ITEM", payload: { id: null } })}
+                    >
+                        {items.map((item) => {
+                            const isSelected = state.selectedItemId === item.id;
 
-                        if (item.type === "color") {
-                            return (
-                                <ColorItemView
-                                    key={item.id}
-                                    item={item}
-                                    isSelected={isSelected}
-                                    onSelect={handleSelect}
-                                    dispatch={dispatch}
-                                    scale={scale}
-                                />
-                            );
-                        }
+                            if (item.type === "color") {
+                                return (
+                                    <ColorItemView
+                                        key={item.id}
+                                        item={item}
+                                        isSelected={isSelected}
+                                        onSelect={handleSelect}
+                                        dispatch={dispatch}
+                                        scale={scale}
+                                    />
+                                );
+                            }
 
-                        if (item.type === "text") {
-                            return (
-                                <TextItemView
-                                    key={item.id}
-                                    item={item}
-                                    isSelected={isSelected}
-                                    onSelect={handleSelect}
-                                    dispatch={dispatch}
-                                    scale={scale}
-                                />
-                            )
-                        }
+                            if (item.type === "text") {
+                                return (
+                                    <TextItemView
+                                        key={item.id}
+                                        item={item}
+                                        isSelected={isSelected}
+                                        onSelect={handleSelect}
+                                        dispatch={dispatch}
+                                        scale={scale}
+                                    />
+                                )
+                            }
 
-                        if (item.type === "image") {
-                            return (
-                                <ImageItemView
-                                    key={item.id}
-                                    item={item}
-                                    isSelected={isSelected}
-                                    onSelect={handleSelect}
-                                    dispatch={dispatch}
-                                    scale={scale}
-                                />
-                            );
-                        }
+                            if (item.type === "image") {
+                                return (
+                                    <ImageItemView
+                                        key={item.id}
+                                        item={item}
+                                        isSelected={isSelected}
+                                        onSelect={handleSelect}
+                                        dispatch={dispatch}
+                                        scale={scale}
+                                    />
+                                );
+                            }
 
-                        return null;
-                    })}
+                            return null;
+                        })}
+                    </div>
                 </div>
+
             </div>
         </div>
 

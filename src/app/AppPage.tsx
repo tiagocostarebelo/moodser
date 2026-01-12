@@ -67,10 +67,12 @@ const AppPage = () => {
 
     return (
         <AppLayout>
-            <div className="mb-4">
-                <Toolbar state={state} dispatch={dispatch} boardRef={boardRef} />
+            <div className="rounded-2xl bg-neutral-900/60 p-3 ring-1 ring-white/10 sm:p-4">
+                <div className="mb-3">
+                    <Toolbar state={state} dispatch={dispatch} boardRef={boardRef} />
+                </div>
+                <Canvas state={state} dispatch={dispatch} boardRef={boardRef} />
             </div>
-            <Canvas state={state} dispatch={dispatch} boardRef={boardRef} />
         </AppLayout>
     );
 };
