@@ -52,12 +52,9 @@ const ColorItemView = ({ item, isSelected, onSelect, dispatch, scale }: ColorIte
                 onPointerUp={dragHandlers.onPointerUp}
                 onPointerCancel={dragHandlers.onPointerCancel}
                 style={{
-                    left: item.x,
-                    top: item.y,
                     backgroundColor: item.hex,
                     width: item.width,
                     height: item.height,
-                    zIndex: item.zIndex,
                     borderColor: isSelected ? "#3b82f6" : "transparent",
                     borderWidth: 2,
                     cursor: "grab"
@@ -69,7 +66,7 @@ const ColorItemView = ({ item, isSelected, onSelect, dispatch, scale }: ColorIte
                     role="button"
                     tabIndex={0}
                     aria-label="Resize"
-                    className={`absolute bottom-0 right-0 h-3 w-3 cursor-se-resize rounded-md bg-black/70 touch-none`}
+                    className={`absolute bottom-0 right-0 h-3 w-3 cursor-se-resize rounded-md bg-white touch-none ${isSelected ? "ring-2 ring-blue-500" : ""}`}
                     onPointerDown={resizeHandlers.onPointerDown}
                     onPointerMove={resizeHandlers.onPointerMove}
                     onPointerUp={resizeHandlers.onPointerUp}

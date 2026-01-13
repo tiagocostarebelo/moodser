@@ -42,7 +42,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
 
         <div
             ref={viewportRef}
-            className="w-full h-full overflow-auto rounded-xl bg-neutral-900/40 p-4 p-6"
+            className="w-full h-full overflow-auto rounded-xl bg-neutral-900/40 p-4"
         >
             <div className="mx-auto w-fit">
                 <div
