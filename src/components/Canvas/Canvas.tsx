@@ -42,7 +42,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
 
         <div
             ref={viewportRef}
-            className="workspace-dots relative w-full overflow-auto rounded-xl bg-neutral-950/40 p-4 sm:p-6"
+            className="w-full h-full overflow-auto rounded-xl bg-neutral-900/40 p-4 p-6"
         >
             <div className="mx-auto w-fit">
                 <div
@@ -55,7 +55,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
                 >
                     <div
                         ref={boardRef}
-                        className="relative rounded-xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.45)] ring-1 ring-black/10"
+                        className="relative mx-auto rounded-xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.45)]"
                         style={{ width: state.board.width, height: state.board.height }}
                         onPointerDown={() => dispatch({ type: "SELECT_ITEM", payload: { id: null } })}
                     >

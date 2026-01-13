@@ -1,219 +1,217 @@
-import { useState, useRef, useEffect } from "react";
-import * as htmlToImage from "html-to-image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { BoardAction, BoardState } from "../../app/boardReducer";
+import { ImagePlus, Square, Type, X, SlidersHorizontal } from "lucide-react";
 
 type ToolbarProps = {
     state: BoardState;
     dispatch: React.Dispatch<BoardAction>;
-    boardRef: React.RefObject<HTMLDivElement | null>;
+    variant: "sidebar" | "dock";
 };
 
-const Toolbar = ({ state, dispatch, boardRef }: ToolbarProps) => {
+export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
     const [imageUrl, setImageUrl] = useState("");
-    const [isOpen, setIsOpen] = useState(false);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    const selectedItem = state.selectedItemId ? state.board.items.find((item) => item.id === state.selectedItemId) : null;
+    const selectedItem = useMemo(() => {
+        if (!state.selectedItemId) return null;
+        return state.board.items.find((i) => i.id === state.selectedItemId) ?? null;
+    }, [state.selectedItemId, state.board.items]);
+
     const selectedColorItem = selectedItem?.type === "color" ? selectedItem : null;
 
     const urlRef = useRef<HTMLInputElement | null>(null);
 
-    const btn = "whitespace-nowrap rounded-lg border border-black/10 bg-white px-3 py-2 text-sm font-medium text-neutral-900 shadow-sm hover:bg-neutral-50 active:translate-y-[1px]";
+    useEffect(() => {
+        if (!isSheetOpen) return;
+        urlRef.current?.focus();
+    }, [isSheetOpen]);
 
-    const btnGhost = "whitespace-nowrap rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white hover:bg-white/10";
-
-    const input = "w-full sm:w-80 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm outline-none focus:ring-2 focus:ring-black/15";
-
-
-    const exportPng = async () => {
-        const node = boardRef.current;
-        if (!node) return;
-
-        try {
-            const dataUrl = await htmlToImage.toPng(node, {
-                cacheBust: true,
-                pixelRatio: 2,
-            });
-
-            const link = document.createElement("a");
-            link.download = "moodboard.png";
-            link.href = dataUrl;
-            link.click();
-        } catch (err) {
-            console.error(err);
-            alert(
-                "Export failed. This is often caused by image URLs that block cross-origin export (CORS). Try a different image source."
-            )
-        }
+    const addImageFromUrl = () => {
+        const src = imageUrl.trim();
+        if (!src) alert("Please enter an image url");
+        dispatch({ type: "ADD_IMAGE_ITEM", payload: { src } });
+        setImageUrl("");
     };
 
-    const toggleAddColor = () => {
-        //if a color is added and is selected, toggle Off the color picker by deselecting it
-        if (selectedColorItem) {
-            dispatch({ type: "SELECT_ITEM", payload: { id: null } });
-            return;
-        }
+    const Controls = (
+        <div className="flex flex-col gap-4">
+            {/* IMAGE */}
+            <div className="space-y-2">
+                <p className="text-xs font-semibold tracking-wide text-white/60">Add</p>
 
-        // If no color is selected, Add Color Item
-        dispatch({ type: "ADD_COLOR_ITEM" })
-    }
-
-    useEffect(() => {
-        if (!isOpen) return;
-        urlRef.current?.focus();
-    }, [isOpen]);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        const prev = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = prev;
-        };
-    }, [isOpen]);
-
-    const ControlsContent = (
-        <div className="flex flex-col gap-2">
-
-            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                    <input
-                        ref={urlRef}
-                        className={input}
-                        placeholder="Paste image URL…"
-                        value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
-                    />
-
-                    <button
-                        type="button"
-                        className={btn}
-                        onClick={() => {
-                            const src = imageUrl.trim();
-                            if (!src) return;
-                            dispatch({ type: "ADD_IMAGE_ITEM", payload: { src } });
-                            setImageUrl("");
-                        }}
-                    >
-                        Add image
-                    </button>
-                </div>
-
+                <label className="text-xs text-white/60">Image URL</label>
+                <input
+                    ref={urlRef}
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/10"
+                    placeholder="Paste image URL…"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                />
                 <button
                     type="button"
-                    className={btn}
-                    onClick={toggleAddColor}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
+                    onClick={addImageFromUrl}
                 >
-                    {selectedColorItem ? "Close color" : "Add Color"}
+                    <ImagePlus size={16} />
+                    Add image
+                </button>
+            </div>
+
+            {/* BUTTONS */}
+            <div className="space-y-2">
+                <button
+                    type="button"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
+                    onClick={() => dispatch({ type: "ADD_COLOR_ITEM" })}
+                >
+                    <Square size={16} />
+                    Add color
                 </button>
 
+                {/* COLOR PICKER (only when selected is color) */}
+                {selectedColorItem && (
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                        <p className="mb-2 text-xs font-semibold text-white/60">Color</p>
+
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="color"
+                                value={selectedColorItem.hex}
+                                onChange={(e) =>
+                                    dispatch({
+                                        type: "UPDATE_COLOR",
+                                        payload: { id: selectedColorItem.id, hex: e.target.value },
+                                    })
+                                }
+                                className="h-10 w-12 cursor-pointer rounded border border-white/10 bg-transparent"
+                                aria-label="Pick color"
+                            />
+
+                            <input
+                                type="text"
+                                value={selectedColorItem.hex}
+                                onChange={(e) =>
+                                    dispatch({
+                                        type: "UPDATE_COLOR",
+                                        payload: { id: selectedColorItem.id, hex: e.target.value },
+                                    })
+                                }
+                                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                                spellCheck={false}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <button
                     type="button"
-                    className={btn}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
                     onClick={() => dispatch({ type: "ADD_TEXT_ITEM" })}
                 >
+                    <Type size={16} />
                     Add text
                 </button>
             </div>
 
 
+        </div>
+    );
 
-            {selectedColorItem && (
-                <div className="flex flex-wrap items-center gap-2">
-                    <label className="text-sm text-neutral-700">Color</label>
-
-                    <input
-                        type="color"
-                        value={selectedColorItem.hex}
-                        onChange={(e) =>
-                            dispatch({
-                                type: "UPDATE_COLOR",
-                                payload: { id: selectedColorItem.id, hex: e.target.value },
-                            })
-                        }
-                        className="h-8 w-10 cursor-pointer rounded border"
-                        aria-label="Pick color"
-                    />
-
-                    <input
-                        type="text"
-                        value={selectedColorItem.hex}
-                        onChange={(e) =>
-                            dispatch({
-                                type: "UPDATE_COLOR",
-                                payload: { id: selectedColorItem.id, hex: e.target.value },
-                            })
-                        }
-                        className="w-28 rounded-md border bg-white px-2 py-1 text-sm"
-                        spellCheck={false}
-                    />
+    // DESKTOP SIDEBAR
+    if (variant === "sidebar") {
+        return (
+            <div className="h-full">
+                <div className="mb-4 flex items-center gap-2">
+                    <SlidersHorizontal size={16} className="text-white/70" />
+                    <p className="text-sm font-semibold">Controls</p>
                 </div>
-            )}
-        </div >
-    )
+                {Controls}
+            </div>
+        );
+    }
 
-
+    // MOBILE DOCK (icons only) + sheet
     return (
         <>
-            {/** DESKTOP */}
-            <div className="hidden sm:flex items-center justify-between gap-3">
-                <div className="min-w-0">{ControlsContent}</div>
-                <button
-                    type="button"
-                    className={btn}
-                    onClick={exportPng}
-                >Export as PNG</button>
+            {/* Bottom dock */}
+            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-neutral-950/85 backdrop-blur">
+                <div className="mx-auto flex max-w-[520px] items-center justify-around px-4 py-3">
+                    <button
+                        type="button"
+                        className="flex flex-col items-center gap-1 text-white/80"
+                        onClick={() => setIsSheetOpen(true)}
+                        aria-label="Open controls"
+                    >
+                        <SlidersHorizontal size={20} />
+                        <span className="text-[10px]">Controls</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        className="flex flex-col items-center gap-1 text-white/80"
+                        onClick={() => {
+                            setIsSheetOpen(true);
+                            // focus URL input next paint
+                            setTimeout(() => urlRef.current?.focus(), 0);
+                        }}
+                        aria-label="Add image"
+                    >
+                        <ImagePlus size={20} />
+                        <span className="text-[10px]">Image</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        className="flex flex-col items-center gap-1 text-white/80"
+                        onClick={() => dispatch({ type: "ADD_COLOR_ITEM" })}
+                        aria-label="Add color"
+                    >
+                        <Square size={20} />
+                        <span className="text-[10px]">Color</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        className="flex flex-col items-center gap-1 text-white/80"
+                        onClick={() =>
+                            dispatch({ type: "ADD_TEXT_ITEM" })}
+                        aria-label="Add text"
+                    >
+                        <Type size={20} />
+                        <span className="text-[10px]">Text</span>
+                    </button>
+                </div>
             </div>
 
-            {/** MOBILE */}
-            <div className="flex items-center justify-between gap-2 sm:hidden">
-                <button
-                    type="button"
-                    className={btnGhost}
-                    onClick={() => setIsOpen(true)}
-                >
-                    Controls
-                </button>
-
-                <button
-                    type="button"
-                    className={btn}
-                    onClick={exportPng}
-                >
-                    Export PNG
-                </button>
-            </div>
-
-            {isOpen && (
-                <div className="sm:hidden">
-                    {/* Backdrop */}
+            {/* Sheet */}
+            {isSheetOpen && (
+                <div className="md:hidden">
                     <button
                         type="button"
                         className="fixed inset-0 z-40 bg-black/50"
                         aria-label="Close controls"
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => setIsSheetOpen(false)}
                     />
-
-                    {/* Sheet */}
-                    <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-auto rounded-t-2xl bg-white p-4 shadow-[0_-18px_60px_rgba(0,0,0,0.35)]">
+                    <div className="fixed inset-x-0 bottom-0 z-50 max-h-[80dvh] overflow-auto rounded-t-2xl border border-white/10 bg-neutral-950 p-4">
                         <div className="mb-3 flex items-center justify-between">
                             <p className="text-sm font-semibold">Controls</p>
                             <button
                                 type="button"
-                                className="whitespace-nowrap rounded-md border px-3 py-1 text-sm"
-                                onClick={() => setIsOpen(false)}
+                                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90"
+                                onClick={() => setIsSheetOpen(false)}
                             >
-                                Close
+                                <span className="inline-flex items-center gap-2">
+                                    <X size={16} />
+                                    Close
+                                </span>
                             </button>
                         </div>
 
-                        {ControlsContent}
+                        {Controls}
+                        <div className="h-16" />
                     </div>
                 </div>
             )}
-
-
         </>
     );
-};
-
-export default Toolbar;
+}

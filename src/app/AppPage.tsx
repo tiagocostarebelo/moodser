@@ -1,40 +1,59 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
+import * as htmlToImage from "html-to-image";
 import AppLayout from "./AppLayout";
 import Canvas from "../components/Canvas/Canvas";
 import Toolbar from "../components/Toolbar/Toolbar";
 import { boardReducer, initialBoardState } from "./boardReducer";
 
-const AppPage = () => {
+export default function AppPage() {
     const [state, dispatch] = useReducer(boardReducer, initialBoardState);
     const boardRef = useRef<HTMLDivElement | null>(null);
 
+    const exportPng = useCallback(async () => {
+        const node = boardRef.current;
+        if (!node) return;
+
+        try {
+            const dataUrl = await htmlToImage.toPng(node, {
+                cacheBust: true,
+                pixelRatio: 2,
+            });
+
+            const link = document.createElement("a");
+            link.download = "moodboard.png";
+            link.href = dataUrl;
+            link.click();
+        } catch (err) {
+            console.error(err);
+            alert(
+                "Export failed. This is often caused by image URLs that block cross-origin export (CORS). Try a different image source."
+            );
+        }
+    }, []);
+
+    // Keyboard shortcuts (you already had this; keep it here)
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement | null;
             const isTyping =
                 target?.tagName === "INPUT" ||
                 target?.tagName === "TEXTAREA" ||
-                (target?.getAttribute("contenteditable") === "true");
+                target?.getAttribute("contenteditable") === "true";
 
             if (isTyping) return;
 
             if (!state.selectedItemId) return;
 
             const step = e.shiftKey ? 10 : 1;
-
             let dx = 0;
             let dy = 0;
 
-            // Delete / Backspace removes selected item
             if (e.key === "Delete" || e.key === "Backspace") {
-                if (!state.selectedItemId) return;
-
                 e.preventDefault();
                 dispatch({ type: "DELETE_ITEM", payload: { id: state.selectedItemId } });
                 return;
             }
 
-            // Keyboard movement
             switch (e.key) {
                 case "ArrowLeft":
                     dx = -step;
@@ -53,7 +72,6 @@ const AppPage = () => {
             }
 
             e.preventDefault();
-
             dispatch({
                 type: "MOVE_ITEM_BY",
                 payload: { id: state.selectedItemId, dx, dy },
@@ -62,19 +80,38 @@ const AppPage = () => {
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [state.selectedItemId, dispatch]);
-
+    }, [state.selectedItemId]);
 
     return (
-        <AppLayout>
-            <div className="rounded-2xl bg-neutral-900/60 p-3 ring-1 ring-white/10 sm:p-4">
-                <div className="mb-3">
-                    <Toolbar state={state} dispatch={dispatch} boardRef={boardRef} />
-                </div>
-                <Canvas state={state} dispatch={dispatch} boardRef={boardRef} />
+        <AppLayout
+            versionLabel="MVP"
+            topRight={
+                <button
+                    type="button"
+                    className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
+                    onClick={exportPng}
+                >
+                    Export PNG
+                </button>
+            }
+        >
+            {/* FULL-WIDTH EDITOR SHELL */}
+            <div className="flex w-full">
+                {/* LEFT SIDEBAR (pinned to edge) */}
+                <aside className="hidden h-[calc(100dvh-112px)] w-[280px] shrink-0 border-r border-white/10 bg-neutral-950/60 p-4 md:block">
+                    <Toolbar state={state} dispatch={dispatch} variant="sidebar" />
+                </aside>
+
+                {/* WORKSPACE */}
+                <main className="h-[calc(100dvh-112px)] flex-1 overflow-auto p-4">
+                    <Canvas state={state} dispatch={dispatch} boardRef={boardRef} />
+                </main>
+            </div>
+
+            {/* MOBILE BOTTOM DOCK (icons only) */}
+            <div className="md:hidden">
+                <Toolbar state={state} dispatch={dispatch} variant="dock" />
             </div>
         </AppLayout>
     );
-};
-
-export default AppPage;
+}
