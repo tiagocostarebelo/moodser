@@ -20,7 +20,7 @@ export function createTextItem(partial?: Partial<TextItem>): TextItem {
     return {
         id: generatedId(),
         type: "text",
-        text: "New text",
+        text: "New note",
         x: 240,
         y: 100,
         width: 240,
