@@ -39,10 +39,9 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
     }, [state.board.width]);
 
     return (
-
         <div
             ref={viewportRef}
-            className="w-full h-full overflow-auto rounded-xl bg-neutral-900/40 p-4"
+            className=""
         >
             <div className="mx-auto w-fit">
                 <div
@@ -55,7 +54,7 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
                 >
                     <div
                         ref={boardRef}
-                        className="relative mx-auto rounded-xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.45)]"
+                        className="relative mx-auto rounded-xl bg-white shadow-[0_18px_60px_rgba(139,92,246,0.35)]"
                         style={{ width: state.board.width, height: state.board.height }}
                         onPointerDown={() => dispatch({ type: "SELECT_ITEM", payload: { id: null } })}
                     >
@@ -105,10 +104,8 @@ const Canvas = ({ state, dispatch, boardRef }: CanvasProps) => {
                         })}
                     </div>
                 </div>
-
             </div>
         </div>
-
     );
 };
 

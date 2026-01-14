@@ -21,6 +21,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
 
     const urlRef = useRef<HTMLInputElement | null>(null);
 
+
     useEffect(() => {
         if (!isSheetOpen) return;
         urlRef.current?.focus();
@@ -33,6 +34,18 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
         setImageUrl("");
     };
 
+    const toggleAddColor = () => {
+        //if a color is added and is selected, toggle Off the color picker by deselecting it
+        if (selectedColorItem) {
+            dispatch({ type: "SELECT_ITEM", payload: { id: null } });
+            return;
+        }
+
+        // If no color is selected, Add Color Item
+        dispatch({ type: "ADD_COLOR_ITEM" })
+    }
+
+
     const Controls = (
         <div className="flex flex-col gap-4">
             {/* IMAGE */}
@@ -42,14 +55,14 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
                 <label className="text-xs text-white/60">Image URL</label>
                 <input
                     ref={urlRef}
-                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/10"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50"
                     placeholder="Paste image URL…"
                     value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
                 />
                 <button
                     type="button"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 px-3 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/30 transition-all hover:scale-101 hover:shadow-purple-500/50 cursor-pointer"
                     onClick={addImageFromUrl}
                 >
                     <ImagePlus size={16} />
@@ -61,16 +74,16 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
             <div className="space-y-2">
                 <button
                     type="button"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
-                    onClick={() => dispatch({ type: "ADD_COLOR_ITEM" })}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 px-3 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/30 transition-all hover:scale-101 hover:shadow-purple-500/50 cursor-pointer"
+                    onClick={toggleAddColor}
                 >
                     <Square size={16} />
-                    Add color
+                    {selectedColorItem ? "Close color picker" : "Add Color"}
                 </button>
 
                 {/* COLOR PICKER (only when selected is color) */}
                 {selectedColorItem && (
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
                         <p className="mb-2 text-xs font-semibold text-white/60">Color</p>
 
                         <div className="flex items-center gap-3">
@@ -83,7 +96,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
                                         payload: { id: selectedColorItem.id, hex: e.target.value },
                                     })
                                 }
-                                className="h-10 w-12 cursor-pointer rounded border border-white/10 bg-transparent"
+                                className="h-10 w-12 cursor-pointer rounded border border-white/10 bg-transparent shadow-sm"
                                 aria-label="Pick color"
                             />
 
@@ -96,7 +109,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
                                         payload: { id: selectedColorItem.id, hex: e.target.value },
                                     })
                                 }
-                                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50"
                                 spellCheck={false}
                             />
                         </div>
@@ -105,15 +118,13 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
 
                 <button
                     type="button"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 px-3 py-2 text-sm font-medium text-white shadow-lg shadow-purple-500/30 transition-all hover:scale-101 hover:shadow-purple-500/50 cursor-pointer"
                     onClick={() => dispatch({ type: "ADD_TEXT_ITEM" })}
                 >
                     <Type size={16} />
                     Add text
                 </button>
             </div>
-
-
         </div>
     );
 
@@ -123,7 +134,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
             <div className="h-full">
                 <div className="mb-4 flex items-center gap-2">
                     <SlidersHorizontal size={16} className="text-white/70" />
-                    <p className="text-sm font-semibold">Controls</p>
+                    <p className="text-sm font-semibold text-white">Controls</p>
                 </div>
                 {Controls}
             </div>
@@ -134,11 +145,11 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
     return (
         <>
             {/* Bottom dock */}
-            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-neutral-950/85 backdrop-blur">
+            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-slate-950/85 backdrop-blur-xl">
                 <div className="mx-auto flex max-w-[520px] items-center justify-around px-4 py-3">
                     <button
                         type="button"
-                        className="flex flex-col items-center gap-1 text-white/80"
+                        className="flex flex-col items-center gap-1 text-white/80 transition-colors hover:text-violet-400 cursor-pointer"
                         onClick={() => setIsSheetOpen(true)}
                         aria-label="Open controls"
                     >
@@ -148,7 +159,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
 
                     <button
                         type="button"
-                        className="flex flex-col items-center gap-1 text-white/80"
+                        className="flex flex-col items-center gap-1 text-white/80 transition-colors hover:text-violet-400 cursor-pointer"
                         onClick={() => {
                             setIsSheetOpen(true);
                             // focus URL input next paint
@@ -162,7 +173,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
 
                     <button
                         type="button"
-                        className="flex flex-col items-center gap-1 text-white/80"
+                        className="flex flex-col items-center gap-1 text-white/80 transition-colors hover:text-violet-400 cursor-pointer"
                         onClick={() => dispatch({ type: "ADD_COLOR_ITEM" })}
                         aria-label="Add color"
                     >
@@ -172,7 +183,7 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
 
                     <button
                         type="button"
-                        className="flex flex-col items-center gap-1 text-white/80"
+                        className="flex flex-col items-center gap-1 text-white/80 transition-colors hover:text-violet-400 cursor-pointer"
                         onClick={() =>
                             dispatch({ type: "ADD_TEXT_ITEM" })}
                         aria-label="Add text"
@@ -188,19 +199,19 @@ export default function Toolbar({ state, dispatch, variant }: ToolbarProps) {
                 <div className="md:hidden">
                     <button
                         type="button"
-                        className="fixed inset-0 z-40 bg-black/50"
+                        className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
                         aria-label="Close controls"
                         onClick={() => setIsSheetOpen(false)}
                     />
-                    <div className="fixed inset-x-0 bottom-0 z-50 max-h-[80dvh] overflow-auto rounded-t-2xl border border-white/10 bg-neutral-950 p-4">
+                    <div className="fixed inset-x-0 bottom-0 z-50 max-h-[80dvh] overflow-auto rounded-t-2xl border border-white/10 bg-slate-950/95 p-4 backdrop-blur-xl">
                         <div className="mb-3 flex items-center justify-between">
-                            <p className="text-sm font-semibold">Controls</p>
+                            <p className="text-sm font-semibold text-white">Controls</p>
                             <button
                                 type="button"
-                                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/90"
+                                className="rounded-lg border border-white/10 bg-white/5 px-4 py-1 text-sm text-white/90 transition-colors hover:bg-white/10 cursor-pointer"
                                 onClick={() => setIsSheetOpen(false)}
                             >
-                                <span className="inline-flex items-center gap-2">
+                                <span className="inline-flex items-center gap-2 pt-1">
                                     <X size={16} />
                                     Close
                                 </span>

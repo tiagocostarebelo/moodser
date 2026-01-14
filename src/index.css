@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 .workspace-dots {
     background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, white 1px);
     background-size: 18px 18px;

@@ -31,7 +31,7 @@ export default function AppPage() {
         }
     }, []);
 
-    // Keyboard shortcuts (you already had this; keep it here)
+    // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const target = e.target as HTMLElement | null;
@@ -88,7 +88,7 @@ export default function AppPage() {
             topRight={
                 <button
                     type="button"
-                    className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
+                    className="rounded-lg bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-2xl shadow-purple-500/50 transition-all hover:scale-105 hover:shadow-purple-500/70 cursor-pointer"
                     onClick={exportPng}
                 >
                     Export PNG
@@ -98,12 +98,12 @@ export default function AppPage() {
             {/* FULL-WIDTH EDITOR SHELL */}
             <div className="flex w-full">
                 {/* LEFT SIDEBAR (pinned to edge) */}
-                <aside className="hidden h-[calc(100dvh-112px)] w-[280px] shrink-0 border-r border-white/10 bg-neutral-950/60 p-4 md:block">
+                <aside className="hidden h-[calc(100dvh-125px)] w-[280px] shrink-0 border-r border-white/10 bg-white/5 backdrop-blur-xl p-4 md:block">
                     <Toolbar state={state} dispatch={dispatch} variant="sidebar" />
                 </aside>
 
                 {/* WORKSPACE */}
-                <main className="h-[calc(100dvh-112px)] flex-1 overflow-auto p-4">
+                <main className="h-[calc(100dvh-125px)] flex-1 overflow-auto p-4">
                     <Canvas state={state} dispatch={dispatch} boardRef={boardRef} />
                 </main>
             </div>
