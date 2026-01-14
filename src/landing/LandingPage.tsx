@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { Github, Play, Palette, Layers, MousePointer2, Zap, Download, Sparkles } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 const LandingPage = () => {
     const navigate = useNavigate();
