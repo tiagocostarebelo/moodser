@@ -129,7 +129,7 @@ export default function AppPage() {
 
     return (
         <AppLayout
-            versionLabel="MVP"
+            versionLabel="v1.0"
             topCenter={selectionBar}
             topRight={exportButton}
         >

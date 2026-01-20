@@ -1,6 +1,14 @@
 import { useNavigate } from "react-router";
 import { Github, Play, Palette, Layers, MousePointer2, Zap, Download, Sparkles } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
+import moodboardThinking from "../assets/support_thinking.webp";
+import moodboardHero from "../assets/app_preview.webp";
+import composeImg from "../assets/composeImg.webp";
+import notesImg from "../assets/notesImg.webp";
+import paletteImg from "../assets/paletteImg.webp";
+import imagesImg from "../assets/imagesImg.webp";
+import uiImg from "../assets/uiImg.webp";
+import exportImg from "../assets/exportImg.webp";
 
 type SectionVariant = "dark" | "light";
 
@@ -265,25 +273,21 @@ const LandingPage = () => {
                 title: "Brand direction",
                 description: "Collect references, test palettes, and align on a visual lane.",
                 gradient: "from-purple-500 to-indigo-500",
-                emoji: "🎨",
             },
             {
                 title: "UI moodboards",
                 description: "Capture patterns, components, and layout inspiration in one canvas.",
                 gradient: "from-blue-500 to-cyan-500",
-                emoji: "💡",
             },
             {
                 title: "Campaign planning",
                 description: "Map visual direction for launches, ads, and content themes.",
                 gradient: "from-orange-500 to-amber-500",
-                emoji: "📋",
             },
             {
                 title: "Client concepts",
                 description: "Present a direction clearly—without a heavy deck or toolchain.",
                 gradient: "from-pink-500 to-rose-500",
-                emoji: "✨",
             },
         ],
         []
@@ -296,7 +300,7 @@ const LandingPage = () => {
                 <div className="container mx-auto flex items-center justify-between px-6 py-4">
                     <Reveal show={isVisible} delayMs={0}>
                         <h1 className="text-lg font-semibold text-white">Mooder</h1>
-                        <p className="text-sm text-slate-400">MVP · Visual thinking on a canvas</p>
+                        <p className="text-sm text-slate-400">Visual thinking on a canvas</p>
                     </Reveal>
 
                     <Reveal show={isVisible} delayMs={100}>
@@ -356,7 +360,7 @@ const LandingPage = () => {
                             <p className="mb-10 text-lg leading-relaxed text-slate-300 md:text-xl">
                                 For designers, creators, and teams shaping ideas.
                                 <br />
-                                Collect images, colors, and notes in one place—no file saving, no heavy editor, no endless menus.
+                                Collect images, colors, and notes in one place, no file saving, no heavy editor, no endless menus.
                             </p>
                         </Reveal>
 
@@ -380,12 +384,18 @@ const LandingPage = () => {
                         </Reveal>
 
                         <Reveal show={isVisible} delayMs={400}>
-                            <Card variant="dark" className="mt-16 p-8" hover={false}>
-                                <div className="absolute -inset-4 animate-pulse rounded-3xl bg-gradient-to-r from-pink-500/30 via-violet-500/30 to-cyan-500/30 blur-2xl" />
-                                <div className="relative flex aspect-video items-center justify-center rounded-lg bg-white shadow-2xl">
-                                    <p className="text-slate-600">App preview / demo video</p>
+                            <div className="mt-16">
+                                <div className="relative mx-auto mt-16 max-w-6xl rounded-2xl bg-black/20 p-4 backdrop-blur-sm">
+                                    <div className="overflow-hidden rounded-xl bg-white shadow-2xl">
+                                        <img
+                                            src={moodboardHero}
+                                            alt="Moodboard Composer app interface"
+                                            className="w-full object-cover"
+                                            loading="lazy"
+                                        />
+                                    </div>
                                 </div>
-                            </Card>
+                            </div>
                         </Reveal>
                     </div>
                 </div>
@@ -422,13 +432,14 @@ const LandingPage = () => {
                                                     Add elements and move them freely—no rigid layout grid.
                                                 </p>
 
-                                                <div className="mt-6 rounded-xl bg-white/15 p-4">
-                                                    <div className="grid grid-cols-6 gap-2">
-                                                        {Array.from({ length: 12 }).map((_, i) => (
-                                                            // eslint-disable-next-line react/no-array-index-key
-                                                            <div key={i} className="aspect-square rounded-md bg-white/25" />
-                                                        ))}
-                                                    </div>
+                                                <div className="mt-6 overflow-hidden rounded-xl bg-white/10">
+                                                    <img
+                                                        src={composeImg}
+                                                        alt="Moodboard composition example"
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                        draggable={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -447,10 +458,15 @@ const LandingPage = () => {
                                                 <p className="mt-2 text-sm text-white/90">
                                                     Write context next to references, where you’ll actually use it.
                                                 </p>
-                                                <div className="mt-6 space-y-2 rounded-xl bg-white/15 p-4">
-                                                    <div className="h-3 w-3/4 rounded bg-white/30" />
-                                                    <div className="h-3 w-full rounded bg-white/30" />
-                                                    <div className="h-3 w-5/6 rounded bg-white/30" />
+
+                                                <div className="mt-6 overflow-hidden rounded-xl bg-white/10">
+                                                    <img
+                                                        src={notesImg}
+                                                        alt="Notes next to your references"
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                        draggable={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -472,11 +488,15 @@ const LandingPage = () => {
                                                 <p className="mt-2 text-sm text-white/90">
                                                     Drop colors onto the board to explore direction and contrast.
                                                 </p>
-                                                <div className="mt-6 grid grid-cols-5 gap-2 rounded-xl bg-white/15 p-4">
-                                                    {Array.from({ length: 10 }).map((_, i) => (
-                                                        // eslint-disable-next-line react/no-array-index-key
-                                                        <div key={i} className="aspect-square rounded-lg bg-white/25" />
-                                                    ))}
+
+                                                <div className="mt-6 overflow-hidden rounded-xl bg-white/10">
+                                                    <img
+                                                        src={paletteImg}
+                                                        alt="Palette blocks example"
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                        draggable={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -496,11 +516,14 @@ const LandingPage = () => {
                                                     Bring in images fast and compose them like a board, not a gallery.
                                                 </p>
 
-                                                <div className="mt-6 grid grid-cols-3 gap-3 rounded-xl bg-white/15 p-4">
-                                                    {Array.from({ length: 6 }).map((_, i) => (
-                                                        // eslint-disable-next-line react/no-array-index-key
-                                                        <div key={i} className="aspect-[4/3] rounded-lg bg-white/25" />
-                                                    ))}
+                                                <div className="mt-6 overflow-hidden rounded-xl bg-white/10">
+                                                    <img
+                                                        src={imagesImg}
+                                                        alt="Image references collage"
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                        draggable={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -519,20 +542,18 @@ const LandingPage = () => {
                                                     Focused workflow
                                                 </div>
                                                 <h3 className="mt-3 text-xl font-semibold text-white">Minimal UI</h3>
-                                                <p className="mt-2 text-sm text-white/80">One canvas. Full attention. Minimal controls.</p>
+                                                <p className="mt-2 text-sm text-white/80">
+                                                    One canvas. Full attention. Minimal controls.
+                                                </p>
 
-                                                <div className="mt-6 rounded-xl bg-white/10 p-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-pink-500 to-rose-500" />
-                                                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-500" />
-                                                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500" />
-                                                        <div className="ml-auto h-9 w-24 rounded-full bg-white/15" />
-                                                    </div>
-                                                    <div className="mt-4 space-y-2">
-                                                        <div className="h-3 w-2/3 rounded bg-white/15" />
-                                                        <div className="h-3 w-5/6 rounded bg-white/15" />
-                                                        <div className="h-3 w-1/2 rounded bg-white/15" />
-                                                    </div>
+                                                <div className="mt-6 overflow-hidden rounded-xl bg-white/10">
+                                                    <img
+                                                        src={uiImg}
+                                                        alt="App UI preview"
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                        draggable={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -551,11 +572,15 @@ const LandingPage = () => {
                                                 <p className="mt-2 text-sm text-white/90">
                                                     Download a crisp PNG when the board feels right.
                                                 </p>
-                                                <div className="mt-6 rounded-xl bg-white/15 p-4">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="h-10 w-10 rounded-lg bg-white/25" />
-                                                        <div className="h-10 flex-1 rounded-lg bg-white/25" />
-                                                    </div>
+
+                                                <div className="mt-6 overflow-hidden rounded-xl bg-white/10">
+                                                    <img
+                                                        src={exportImg}
+                                                        alt="Exported PNG example"
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                        draggable={false}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -612,50 +637,38 @@ const LandingPage = () => {
 
                                 <div className="space-y-6">
                                     {[
-                                        { text: "No account. No workspaces", icon: "🚫" },
-                                        { text: "No infinite menus", icon: "✨" },
-                                        { text: "One canvas. Full attention", icon: "🎯" },
-                                        { text: "Made for desktop and tablet", icon: "💻" },
+                                        { text: "One canvas. Full attention", },
+                                        { text: "No account. No workspaces", },
+                                        { text: "No infinite menus", },
+                                        { text: "Made for desktop and tablet", },
                                     ].map((item, index) => (
                                         <Reveal
-                                            // eslint-disable-next-line react/no-array-index-key
+
                                             key={index}
                                             show={isSectionVisible("philosophy")}
                                             delayMs={300 + index * 100}
                                         >
                                             <div className="flex items-start gap-4 rounded-xl border border-transparent p-4 transition-all hover:border-slate-200 hover:bg-slate-50">
-                                                <span className="text-2xl">{item.icon}</span>
+
                                                 <span className="text-lg text-slate-700">{item.text}</span>
                                             </div>
                                         </Reveal>
                                     ))}
                                 </div>
-
-                                <p className="mt-6 text-sm text-slate-500">
-                                    MVP note: collaboration, cloud libraries, and comments are intentionally out for now.
-                                </p>
                             </Reveal>
 
                             <Reveal show={isSectionVisible("philosophy")} delayMs={400}>
                                 <div className="sticky top-24">
-                                    <Card variant="light" className="p-8" hover={false}>
-                                        <div className="space-y-4">
-                                            <div className="h-4 w-3/4 rounded bg-slate-200/70" />
-                                            <div className="h-4 w-full rounded bg-slate-200/70" />
-                                            <div className="h-4 w-5/6 rounded bg-slate-200/70" />
-
-                                            <div className="my-6 grid grid-cols-3 gap-3">
-                                                <div className="aspect-square rounded-lg bg-gradient-to-br from-pink-500 to-rose-500" />
-                                                <div className="aspect-square rounded-lg bg-gradient-to-br from-violet-500 to-purple-500" />
-                                                <div className="aspect-square rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500" />
-                                            </div>
-
-                                            <div className="h-4 w-2/3 rounded bg-slate-200/70" />
-                                            <div className="h-4 w-4/5 rounded bg-slate-200/70" />
+                                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                                        <img
+                                            src={moodboardThinking}
+                                            alt="Moodboard Composer preview"
+                                            className="h-auto w-full object-cover"
+                                        />
+                                        <div className="border-t border-slate-200 px-4 py-3 text-center text-sm text-slate-500">
+                                            Visual composition preview
                                         </div>
-
-                                        <div className="mt-6 text-center text-sm text-slate-500">Visual composition preview</div>
-                                    </Card>
+                                    </div>
                                 </div>
                             </Reveal>
                         </div>
@@ -708,7 +721,6 @@ const LandingPage = () => {
                                         className={`absolute inset-0 bg-gradient-to-br ${useCase.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-[0.07]`}
                                     />
                                     <div className="relative">
-                                        <div className="mb-4 text-4xl">{useCase.emoji}</div>
                                         <h3 className="mb-3 text-lg font-semibold text-slate-900">{useCase.title}</h3>
                                         <p className="text-sm leading-relaxed text-slate-600">{useCase.description}</p>
                                     </div>
@@ -777,15 +789,8 @@ const LandingPage = () => {
                             </p>
                         </div>
                         <div className="flex items-center gap-6">
-                            <a
-                                href="https://github.com/tiagocostarebelo/mooder"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm text-slate-400 transition-colors hover:text-white"
-                            >
-                                GitHub
-                            </a>
-                            <span className="text-xs text-slate-500">v1.0 MVP</span>
+
+                            <span className="text-xs text-slate-500">v1.0</span>
                         </div>
                     </div>
                 </div>
